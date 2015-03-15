@@ -1,39 +1,43 @@
 <?php
 require 'core/init.php';
+var_dump(Token::check(Input::get('token')));
 
 if(Input::exists()){
-	$validate = new Validation();
-	$validation = $validate->check($_POST, array(
-		'username' => array(
-			'required' => true,
-			'min' => 2,
-			'max' => 20,
-			'unique' => 'users'
-		),
+	if(Token::check(Input::get('token')) )
+	{
+		$validate = new Validation();
+		$validation = $validate->check($_POST, array(
+			'username' => array(
+				'required' => true,
+				'min' => 2,
+				'max' => 20,
+				'unique' => 'users'
+			),
 
-		'password' => array(
-			'required' => true,
-			'min' => 6
-		),
+			'password' => array(
+				'required' => true,
+				'min' => 6
+			),
 
-		'password_again' => array(
-			'required' => true,
-			'matches' => 'password'
-		),
+			'password_again' => array(
+				'required' => true,
+				'matches' => 'password'
+			),
 
-		'name' => array(
-			'required' => true,
-			'min' => 2,
-			'max' => 50
-		)
-	));
+			'name' => array(
+				'required' => true,
+				'min' => 2,
+				'max' => 50
+			)
+		));
 
-	if($validate->passed()){
-		echo "Passed";
-	}
-	else{
-		foreach ($validate->errors() as $error) {
-			echo $error, '<br />';
+		if($validate->passed()){
+			echo "Passed";
+		}
+		else{
+			foreach ($validate->errors() as $error) {
+				echo $error, '<br />';
+			}
 		}
 	}
 }
@@ -65,6 +69,7 @@ if(Input::exists()){
 			<input type="text" name="name" id="name" value="<?php echo escape(Input::get('name')); ?>">
 		</div>
 
+		<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 		<input type="submit" value="Register me">
 	</form>
 </body>
