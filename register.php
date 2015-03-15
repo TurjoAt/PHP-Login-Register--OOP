@@ -32,7 +32,8 @@ if(Input::exists()){
 		));
 
 		if($validate->passed()){
-			echo "Passed";
+			Session::flash('success', 'Thanks for registering! You can login now.');
+			header('Location: index.php');
 		}
 		else{
 			foreach ($validate->errors() as $error) {
