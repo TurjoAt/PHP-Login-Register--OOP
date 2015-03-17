@@ -1,6 +1,5 @@
 <?php
 require 'core/init.php';
-var_dump(Token::check(Input::get('token')));
 
 if(Input::exists()){
 	if(Token::check(Input::get('token')) )
@@ -32,8 +31,26 @@ if(Input::exists()){
 		));
 
 		if($validate->passed()){
-			Session::flash('success', 'Thanks for registering! You can login now.');
-			header('Location: index.php');
+			$user = new User();
+
+			$salt = Hash::salt(32);
+
+			try{
+				$user->create(array(
+					'username'	=> Input::get('username'),
+					'password'	=> Hash::make(Input::get('password'), $salt),
+					'salt'		=> $salt,
+					'name'		=> Input::get('name'),
+					'joined'	=> date('Y-m-d H:i:s'),
+					'groups'	=> 1
+					));
+
+				Session::flash('home', 'Thanks for registering! You can login now.');
+				header('Location: index.php');
+			}
+			catch(Exception $e){
+				die($e->getMessage());
+			}
 		}
 		else{
 			foreach ($validate->errors() as $error) {
