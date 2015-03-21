@@ -38,7 +38,7 @@ class DB{
 
 	public function query($sql, $params = array())
 	{
-		$this->error = false;
+		$this->_error = false;
 		if($this->_query = $this->_pdo->prepare($sql))
 		{	
 			$x = 1;
@@ -53,7 +53,7 @@ class DB{
 
 			if($this->_query->execute())
 			{
-				$this->_requests	= $this->_query->fetchAll(PDO::FETCH_OBJ);
+				$this->_results		= $this->_query->fetchAll(PDO::FETCH_OBJ);
 				$this->_count 		= $this->_query->rowCount();
 			}
 			else
@@ -77,7 +77,7 @@ class DB{
 
 			if(in_array($operator, $operators))
 			{
-				$sql = "{$action} * FROM {$table} WHERE {$field} {$operator} ?";
+				$sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
 				if(!$this->query($sql, array($value))->error())
 				{
 					return $this;
@@ -89,7 +89,7 @@ class DB{
 
 	public function get($table, $where)
 	{
-		return $this->action('SELECT', $table, $where);
+		return $this->action('SELECT *', $table, $where);
 	}
 
 	public function delete($table, $where)
