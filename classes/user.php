@@ -34,6 +34,17 @@ class User{
 		}
 	}
 
+	public function update($fields = array(), $id = null)
+	{
+		if(!$id && $this->isLoggedIn()){
+			$id = $this->data()->uid;
+		}
+
+		if(!$this->_db->update('users', $id, $fields)){
+			throw new Exception('Unable to update');
+		}
+	}
+
 	public function create($fields = array())
 	{
 		if(!$this->_db->insert('users', $fields))
