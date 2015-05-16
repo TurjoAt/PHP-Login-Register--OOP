@@ -24,7 +24,7 @@ class Input {
 			return $_POST[$item];
 		}
 		elseif (isset($_GET[$item])) {
-			return $_POST[$item];
+			return $_GET[$item];
 		}
 		return '';
 	}
